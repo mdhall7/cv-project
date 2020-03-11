@@ -10,6 +10,22 @@ def test(image):
 	cv2.imshow("test", image)
 	cv2.waitKey(0)
 
+def test2(image):
+	hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV) 
+	lower_red = np.array([30,150,50]) 
+	upper_red = np.array([255,255,180]) 
+	mask = cv2.inRange(hsv, lower_red, upper_red) 
+	res = cv2.bitwise_and(image,image, mask= mask) 
+	cv2.imshow('Original',image) 
+	edges = cv2.Canny(image,100,200) 
+	cv2.imshow('Edges',edges)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()  
+
+
+
+def test4():
+	pass
 
 def main():
 	file_path = input("Where is the image stored:")
@@ -17,9 +33,15 @@ def main():
 	if(image is None):
 		print("whoopsiedaisie")
 		return
-	test(image)
-	
+	image1 = image.copy()
+	image2 = image.copy()
+	image3 = image.copy()
+	test(image1)
+	test2(image2)
 
 
 if __name__ == "__main__":
 	main()
+
+
+
