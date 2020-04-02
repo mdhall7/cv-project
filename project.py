@@ -46,12 +46,15 @@ def clear_image(canvas):
 def get_masks(image):
     pass
 
-def select(canvas, menu, event):
-    x, y = event.x, event.y
-    for i in range(length(canvas.mask_list)):
-        if (canvas.mask_list[i][y][x]):
-            canvas.selected = i
-    # canvas.selected_mask = make_selected_mask(canvas.mask_list[i])
+def select(event):
+    x = event.x
+    y = event.y
+    i = 0
+    for num in range(len(event.widget.mask_list)):
+        if (event.widget.mask_list[num][y][x]):
+            event.widget.selected = num
+            i = num
+    event.widget.selected_mask = make_selected_mask(event.widget.mask_list[i])
 
 
 
@@ -69,7 +72,7 @@ def make_selected_mask(mask_list):
 def set_texture(canvas, menu):
     # texture = get_texture(canvas.image.shape)
     canvas.undo_list.insert(0,canvas.display)
-    if(length(canvas.undo_list) > 5):
+    if(len  (canvas.undo_list) > 5):
         canvas.undo_list = canvas.undo_list[:5]
     canvas.redo_list = []
     canvas.dispay = (1-canvas.mask_list[canvas.selected])*canvas.image + canvas.mask_list[canvas.selected]*texture
@@ -101,6 +104,7 @@ def redo_chage(canvas, menu):
         canvas.undo_list = canvas.undo_list[:5]
     menu.entryconfig('Undo', state= 'normal')
 
+
 def main():
     window = tkinter.Tk()
     window.title('')
@@ -117,8 +121,8 @@ def main():
     canvas.undo_list = []
     canvas.redo_list = []
     canvas.has_image = False
-    # canvas.bind('<Button-1>', select(canvas, menu))
-    # canvas.bind('<Button-3', deselect(canvas, menu))
+    canvas.bind('<Button-1>', select)
+    canvas.bind('<Button-3', deselect(canvas, menu))
     canvas.pack(fill="both", expand="yes")
     file_menu.add_command(label = 'Clear image', command = lambda: clear_image(canvas))
     file_menu.add_command(label = 'show Room 1', command= lambda: show_image(canvas, 'room1.jpg'))#cv2.resize(cv2.imread('room1.jpg'), (800, 800))))
